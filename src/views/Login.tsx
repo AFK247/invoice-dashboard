@@ -34,6 +34,7 @@ import themeConfig from '@configs/themeConfig'
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
+import CONFIG from '@/config'
 
 // Styled Custom Components
 const LoginIllustration = styled('img')(({ theme }) => ({
@@ -87,6 +88,16 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   )
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
+
+  const quickBookLoginHandler = () => {
+    const clientId = CONFIG.quickBookClientId
+    const redirectUri = encodeURIComponent(CONFIG.quickBookRedirectUri!)
+    const scope = encodeURIComponent(CONFIG.quickBookScopes!)
+
+    const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=1234`
+
+    window.open(authUrl)
+  }
 
   return (
     <div className='flex bs-full justify-center'>
@@ -150,6 +161,9 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
             </div>
             <Button fullWidth variant='contained' type='submit'>
               Login
+            </Button>
+            <Button onClick={quickBookLoginHandler} fullWidth variant='contained' type='button'>
+              Quick Book Login
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>

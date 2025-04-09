@@ -1,4 +1,4 @@
-import { CreateInvoice } from '@/components/invoice/CreateInvoice'
+import { CreateInvoice } from '@/views/invoice/CreateInvoice'
 
 export default function Page() {
   return <CreateInvoice />
