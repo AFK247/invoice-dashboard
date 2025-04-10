@@ -1,4 +1,6 @@
 'use client'
+import { useState } from 'react'
+
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -21,10 +23,11 @@ const invoiceSchema = z.object({
 type InvoiceFormData = z.infer<typeof invoiceSchema>
 
 export const CreateInvoice = () => {
+  const [loading, setLoading] = useState(false)
+
   const {
     register,
     handleSubmit,
-
     reset,
     formState: { errors }
   } = useForm<InvoiceFormData>({
@@ -35,18 +38,24 @@ export const CreateInvoice = () => {
   })
 
   const onSubmit = async (invoiceData: InvoiceFormData) => {
-    try {
-      const accessToken = getCookieValue('qb_access_token')
-      const realmId = getCookieValue('qb_realm_id')
+    setLoading(true)
 
+    const accessToken = getCookieValue('qb_access_token')
+    const realmId = getCookieValue('qb_realm_id')
+
+    if (!accessToken || !realmId) {
+      setLoading(false)
+
+      return alert('Authorization failed. Please log in again.')
+    }
+
+    try {
       const { data } = await axios.post('http://localhost:5000/api/v1/invoice/create', invoiceData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           realmId
         }
       })
-
-      console.log(data)
 
       if (data?.success) {
         alert('Invoice created!')
@@ -56,6 +65,8 @@ export const CreateInvoice = () => {
       console.error(error)
       alert('Error creating invoice.')
     }
+
+    setLoading(false)
   }
 
   return (
@@ -124,8 +135,8 @@ export const CreateInvoice = () => {
               <TextField label='Description' fullWidth multiline rows={3} {...register('description')} />
             </Grid>
             <Grid item xs={12}>
-              <Button type='submit' variant='contained' color='primary'>
-                Create Invoice
+              <Button disabled={loading} type='submit' variant='contained' color='primary'>
+                {loading ? 'Creating Invoice' : 'Create Invoice'}
               </Button>
             </Grid>
           </Grid>
