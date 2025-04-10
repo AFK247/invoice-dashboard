@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography, TextField, Button, MenuItem, Grid, Paper, Box } from '@mui/material'
 import axios from 'axios'
 
+import { getCookieValue } from '@/utils/getCookie'
+
 // Zod Schema
 const invoiceSchema = z.object({
   clientName: z.string().min(1, 'Client name is required'),
@@ -22,6 +24,7 @@ export const CreateInvoice = () => {
   const {
     register,
     handleSubmit,
+
     reset,
     formState: { errors }
   } = useForm<InvoiceFormData>({
@@ -31,11 +34,24 @@ export const CreateInvoice = () => {
     }
   })
 
-  const onSubmit = async (data: InvoiceFormData) => {
+  const onSubmit = async (invoiceData: InvoiceFormData) => {
     try {
-      await axios.post('/api/invoices', data)
-      alert('Invoice created!')
-      reset()
+      const accessToken = getCookieValue('qb_access_token')
+      const realmId = getCookieValue('qb_realm_id')
+
+      const { data } = await axios.post('http://localhost:5000/api/v1/invoice/create', invoiceData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          realmId
+        }
+      })
+
+      console.log(data)
+
+      if (data?.success) {
+        alert('Invoice created!')
+        reset()
+      }
     } catch (error) {
       console.error(error)
       alert('Error creating invoice.')
