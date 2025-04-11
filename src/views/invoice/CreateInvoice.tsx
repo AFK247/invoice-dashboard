@@ -63,7 +63,7 @@ export const CreateInvoice = () => {
       toast.success('Invoice created successfully!')
       reset() // Form reset after successful submission
     } else {
-      toast.error('Failed to create invoice.')
+      toast.error(res?.message || 'Failed to create invoice.')
     }
 
     setLoading(false)
