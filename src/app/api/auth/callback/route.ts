@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import axios, { isAxiosError } from 'axios'
 
 import CONFIG from '@/config'
-import { QB_ACCESS_TOKEN_COOKIE, QB_REALM_ID_COOKIE, QB_REFRESH_TOKEN_COOKIE } from '@/constant/quickBookAuth'
+import { QB_ACCESS_TOKEN_COOKIE, QB_REALM_ID_COOKIE } from '@/constant/quickBookAuth'
 
 interface TokenResponse {
   access_token: string
@@ -14,6 +14,7 @@ interface TokenResponse {
   x_refresh_token_expires_in?: number
 }
 
+// Function to get access and refresh tokens from authorization code
 async function exchangeCodeForTokens(code: string): Promise<TokenResponse> {
   try {
     const response = await axios.post<TokenResponse>(
@@ -42,6 +43,7 @@ async function exchangeCodeForTokens(code: string): Promise<TokenResponse> {
   }
 }
 
+// API route to handle QuickBooks OAuth callback
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams
   const code = searchParams.get('code')
@@ -63,7 +65,7 @@ export async function GET(req: NextRequest) {
     // Create response for redirection
     const response = NextResponse.redirect(`${CONFIG.baseUrl}/invoice-list`)
 
-    // cookie could have been saved as httpOnly but due to sake of ease of testing Im not using it
+    //// cookie could have been saved as httpOnly but due to sake of ease of testing Im not using it
     // const cookieOptions = {
     //   secure: true,
     //   httpOnly: true,

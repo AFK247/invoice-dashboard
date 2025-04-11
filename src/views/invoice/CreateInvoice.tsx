@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { createInvoice } from '@/service/invoice'
 
-// Zod Schema
+// Zod Validation Schema
 const invoiceSchema = z.object({
   clientName: z.string().min(1, 'Client name is required'),
   email: z.string().email('Invalid email'),
@@ -40,6 +40,7 @@ export const CreateInvoice = () => {
     }
   })
 
+  // Function to handle form submission
   const onSubmit = async (invoiceData: InvoiceFormData) => {
     setLoading(true)
 
@@ -57,7 +58,7 @@ export const CreateInvoice = () => {
 
     if (res?.success) {
       toast.success('Invoice created successfully!')
-      reset()
+      reset() // Form reset after successful submission
     } else {
       toast.error('Failed to create invoice.')
     }

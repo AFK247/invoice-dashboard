@@ -1,6 +1,7 @@
 import CONFIG from '@/config'
 import axios from 'axios'
 
+// Axios instance with a base URL and default headers
 const AXIOS = axios.create({
   baseURL: CONFIG.apiBaseUrl + '/api/v1',
   headers: {

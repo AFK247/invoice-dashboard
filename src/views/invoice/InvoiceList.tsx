@@ -7,7 +7,6 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import { getInvoiceList } from '@/service/invoice'
 
-// Define the Invoice interface based on your API response
 interface Invoice {
   id: number
   clientName: string
@@ -19,7 +18,7 @@ interface Invoice {
   createdAt?: string
 }
 
-// Simple columns without any formatters
+// Columns for DataGrid
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'Invoice ID', flex: 1 },
   { field: 'clientName', headerName: 'Client Name', flex: 1 },
@@ -41,6 +40,7 @@ export const InvoiceList = () => {
     page: 0
   })
 
+  // Function to fetch invoices
   const fetchInvoices = async () => {
     setLoading(true)
 
@@ -50,7 +50,7 @@ export const InvoiceList = () => {
       setInvoices(res)
       setError(null)
     } else {
-      setError('Failed to load invoices.')
+      setError('Failed to load Invoices.')
     }
 
     setLoading(false)
@@ -60,37 +60,45 @@ export const InvoiceList = () => {
     fetchInvoices()
   }, [])
 
+  // If loading, loading spinner is shown
+  if (loading) {
+    return (
+      <Box display='flex' justifyContent='center' alignItems='center' height='100%' p={3}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  // If error occurs, error message is shown
+  if (error) {
+    return (
+      <Box display='flex' justifyContent='center' alignItems='center' height='100%' p={3}>
+        <Typography variant='h4' color='error'>
+          {error}
+        </Typography>
+      </Box>
+    )
+  }
+
   return (
     <Box>
       <Typography variant='h4' gutterBottom>
         Invoices
       </Typography>
       <Paper sx={{ height: 500 }}>
-        {loading ? (
-          <Box display='flex' justifyContent='center' alignItems='center' height='100%'>
-            <CircularProgress />
-          </Box>
-        ) : error ? (
-          <Box display='flex' justifyContent='center' alignItems='center' height='100%' p={3}>
-            <Typography variant='h4' color='error'>
-              {error}
-            </Typography>
-          </Box>
-        ) : (
-          <DataGrid
-            disableRowSelectionOnClick={true}
-            rows={invoices}
-            columns={columns}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[5, 10, 25]}
-            initialState={{
-              sorting: {
-                sortModel: [{ field: 'dueDate', sort: 'asc' }]
-              }
-            }}
-          />
-        )}
+        <DataGrid
+          disableRowSelectionOnClick={true}
+          rows={invoices}
+          columns={columns}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[5, 10, 25]}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'createdAt', sort: 'desc' }]
+            }
+          }}
+        />
       </Paper>
     </Box>
   )
