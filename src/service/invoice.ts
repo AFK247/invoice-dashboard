@@ -21,7 +21,9 @@ export const createInvoice = async (invoiceData: InvoiceFormData, accessToken: s
     })
 
     return data
-  } catch (error) {
+  } catch (error: any) {
     console.log(error)
+
+    return error?.response?.data
   }
 }
