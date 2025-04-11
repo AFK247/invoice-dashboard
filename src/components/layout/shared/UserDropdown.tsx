@@ -23,6 +23,7 @@ import Button from '@mui/material/Button'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
+import { QB_ACCESS_TOKEN_COOKIE, QB_REALM_ID_COOKIE } from '@/constant/quickBookAuth'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -63,6 +64,12 @@ const UserDropdown = () => {
   }
 
   const handleUserLogout = async () => {
+    // Clear cookies
+    const cookiesToClear = [QB_ACCESS_TOKEN_COOKIE, QB_REALM_ID_COOKIE]
+    cookiesToClear.forEach(cookieName => {
+      document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`
+    })
+
     // Redirect to login page
     router.push('/login')
   }
