@@ -96,9 +96,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
     const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=1234`
 
-    console.log(authUrl)
-
-    window.open(authUrl)
+    window.open(authUrl, '_self')
   }
 
   return (
