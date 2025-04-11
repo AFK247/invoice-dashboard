@@ -163,7 +163,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
               Login
             </Button>
             <Button onClick={quickBookLoginHandler} fullWidth variant='contained' type='button'>
-              Quick Book Login
+              Quick Book Authenticate
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>

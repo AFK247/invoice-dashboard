@@ -79,12 +79,8 @@ export async function GET(req: NextRequest) {
       maxAge: expirySeconds - 60 // Set to slightly less than token expiry
     })
 
-    response.cookies.set(QB_REFRESH_TOKEN_COOKIE, tokenData.refresh_token, {
-      maxAge: tokenData.x_refresh_token_expires_in || 24 * 60 * 60 * 90 // Default 90 days
-    })
-
     response.cookies.set(QB_REALM_ID_COOKIE, realmId, {
-      maxAge: 24 * 60 * 60 * 90 // 90 days
+      maxAge: expirySeconds - 60
     })
 
     console.log('OAuth token exchange successful and tokens stored in cookies')

@@ -5,9 +5,11 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography, TextField, Button, MenuItem, Grid, Paper, Box } from '@mui/material'
-import axios from 'axios'
 
 import { getCookieValue } from '@/utils/getCookie'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { createInvoice } from '@/service/invoice'
 
 // Zod Schema
 const invoiceSchema = z.object({
@@ -20,9 +22,10 @@ const invoiceSchema = z.object({
 })
 
 // Type from schema
-type InvoiceFormData = z.infer<typeof invoiceSchema>
+export type InvoiceFormData = z.infer<typeof invoiceSchema>
 
 export const CreateInvoice = () => {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   const {
@@ -45,25 +48,18 @@ export const CreateInvoice = () => {
 
     if (!accessToken || !realmId) {
       setLoading(false)
-
-      return alert('Authorization failed. Please log in again.')
+      toast.error('Session expired. Please authenticate with Quick Book.')
+      router.push('/login')
+      return
     }
 
-    try {
-      const { data } = await axios.post('http://localhost:5000/api/v1/invoice/create', invoiceData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          realmId
-        }
-      })
+    const res = await createInvoice(invoiceData, accessToken, realmId)
 
-      if (data?.success) {
-        alert('Invoice created!')
-        reset()
-      }
-    } catch (error) {
-      console.error(error)
-      alert('Error creating invoice.')
+    if (res?.success) {
+      toast.success('Invoice created successfully!')
+      reset()
+    } else {
+      toast.error('Failed to create invoice.')
     }
 
     setLoading(false)

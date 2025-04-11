@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { Typography, Paper, Box, CircularProgress } from '@mui/material'
 import type { GridColDef } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid'
-import axios from 'axios'
+
+import { getInvoiceList } from '@/service/invoice'
 
 // Define the Invoice interface based on your API response
 interface Invoice {
@@ -40,23 +41,22 @@ export const InvoiceList = () => {
     page: 0
   })
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      setLoading(true)
+  const fetchInvoices = async () => {
+    setLoading(true)
 
-      try {
-        const { data } = await axios.get('http://localhost:5000/api/v1/invoice')
+    const res = await getInvoiceList()
 
-        setInvoices(data?.data)
-        setError(null)
-      } catch (err) {
-        console.error('Failed to fetch invoices:', err)
-        setError('Failed to load invoices. Please try again later.')
-      }
-
-      setLoading(false)
+    if (res) {
+      setInvoices(res)
+      setError(null)
+    } else {
+      setError('Failed to load invoices.')
     }
 
+    setLoading(false)
+  }
+
+  useEffect(() => {
     fetchInvoices()
   }, [])
 
@@ -72,7 +72,9 @@ export const InvoiceList = () => {
           </Box>
         ) : error ? (
           <Box display='flex' justifyContent='center' alignItems='center' height='100%' p={3}>
-            <Typography color='error'>{error}</Typography>
+            <Typography variant='h4' color='error'>
+              {error}
+            </Typography>
           </Box>
         ) : (
           <DataGrid
