@@ -1,5 +1,5 @@
 import AXIOS from '@/helper/axios'
-import { InvoiceFormData } from '@/views/invoice/CreateInvoice'
+import type { InvoiceFormData } from '@/views/invoice/CreateInvoice'
 
 export const getInvoiceList = async () => {
   try {

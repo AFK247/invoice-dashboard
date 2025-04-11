@@ -1,5 +1,6 @@
 // Third-party Imports
 import 'react-perfect-scrollbar/dist/css/styles.css'
+import { Toaster } from 'sonner'
 
 // Type Imports
 import type { ChildrenType } from '@core/types'
@@ -9,8 +10,6 @@ import '@/app/globals.css'
 
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
-
-import { Toaster } from 'sonner'
 
 export const metadata = {
   title: 'Vuexy - MUI Next.js Admin Dashboard Template',

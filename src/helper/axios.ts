@@ -1,5 +1,6 @@
-import CONFIG from '@/config'
 import axios from 'axios'
+
+import CONFIG from '@/config'
 
 // Axios instance with a base URL and default headers
 const AXIOS = axios.create({
