@@ -66,11 +66,13 @@ const UserDropdown = () => {
   const handleUserLogout = async () => {
     // Clear cookies
     const cookiesToClear = [QB_ACCESS_TOKEN_COOKIE, QB_REALM_ID_COOKIE]
+
     cookiesToClear.forEach(cookieName => {
       document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`
     })
 
     // Redirect to login page
+
     router.push('/login')
   }
 
