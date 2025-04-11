@@ -1,9 +1,9 @@
+import AXIOS from '@/helper/axios'
 import { InvoiceFormData } from '@/views/invoice/CreateInvoice'
-import axios from 'axios'
 
 export const getInvoiceList = async () => {
   try {
-    const { data } = await axios.get('http://localhost:5000/api/v1/invoice')
+    const { data } = await AXIOS.get('/invoice')
 
     return data?.data
   } catch (err) {
@@ -13,7 +13,7 @@ export const getInvoiceList = async () => {
 
 export const createInvoice = async (invoiceData: InvoiceFormData, accessToken: string, realmId: string) => {
   try {
-    const { data } = await axios.post('http://localhost:5000/api/v1/invoice/create', invoiceData, {
+    const { data } = await AXIOS.post('/invoice/create', invoiceData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         realmId
